@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Http;
 
 using SportsStore.Models;
 
@@ -28,8 +29,11 @@ namespace SportsStore
             services.AddDbContext<ApplicationDbContext>(options =>
                     options.UseSqlite("Data Source=SportsStore.db"));
             services.AddTransient<IProductRepository, EFProductRepository>();
+            services.AddTransient<IOrderRepository, EFOrderRepository>(); 
             services.AddMemoryCache();
             services.AddSession(); 
+            services.AddScoped<Cart>(sp => SessionCart.GetCart(sp));
+            services.AddSingleton<IHttpContextAccessor, IHttpContextAccessor>();
 
         }
 
@@ -67,22 +71,24 @@ namespace SportsStore
                     defaults: new { controller = "Product", action = "List", productPage = 1 });
 
                 routes.MapRoute(name: null, template: "{controller}/{action}/{id?}");
-            });
-           SeedData.EnsurePopulated(app)
 
+                
+                 routes.MapRoute(
+                     name: "pagination",
+                     template: "Products/Page{productPage}",
+                     defaults: new { Controller = "Product", action = "List" });
 
-
-
-                // routes.MapRoute(
-                //     name: "pagination",
-                //     template: "Products/Page{productPage}",
-                //     defaults: new { Controller = "Product", action = "List" });
-
-                // routes.MapRoute(
-                //     name: "default",
-                //     template: "{controller=Product}/{action=List}/{id?}");
+                 routes.MapRoute(
+                     name: "default",
+                     template: "{controller=Product}/{action=List}/{id?}");
 
             });
+           //SeedData.SaveChanges(app);
+
+        
+
+
+
 
         }
     }
