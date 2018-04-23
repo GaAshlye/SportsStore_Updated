@@ -12,7 +12,7 @@ namespace SportsStore.Models{
 
         public IQueryable<Order> Orders => context.Orders
             .Include(o => o.Lines)
-            .ThenInclude(l = l.Product);
+            .ThenInclude(l => l.Product);
 
         public void SaveOrder(Order order) {
             context.AttachRange(order.Lines.Select(l => l.Product));

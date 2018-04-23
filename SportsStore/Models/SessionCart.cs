@@ -24,12 +24,12 @@ namespace SportsStore.Models
         public override void AddItem(Product product, int quantity)
         {
             base.AddItem(product, quantity);
-            Session.GetJson("Cart", this);
+            Session.SetJson("Cart", this);
         }
         public override void RemoveLine(Product product)
         {
             base.RemoveLine(product);
-            Session.GetJson("Cart", this);
+            Session.SetJson("Cart", this);
         }
 
         public override void Clear()

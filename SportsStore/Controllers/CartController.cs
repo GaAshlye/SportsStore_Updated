@@ -11,7 +11,7 @@ namespace SportsStore.Controllers {
         private IProductRepository repository;
         private Cart cart; 
 
-        public CartController(IProductRepository repo) {
+        public CartController(IProductRepository repo, Cart cartService) {
             repository = repo;
             cart = cartService; 
         }
